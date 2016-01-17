@@ -20,6 +20,9 @@ import qs from 'query-string';
 import getRoutes from './routes';
 import getStatusFromRoutes from './helpers/getStatusFromRoutes';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+
 const targetUrl = 'http://' + config.apiHost + ':' + config.apiPort;
 const pretty = new PrettyError();
 const app = new Express();
@@ -29,6 +32,12 @@ const proxy = httpProxy.createProxyServer({
   ws: true
 });
 
+app.use(function(req, res, next) {
+    GLOBAL.navigator = {
+        userAgent: req.headers['user-agent']
+    }
+    next();
+});
 app.use(compression());
 app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
 
@@ -67,6 +76,13 @@ app.use((req, res) => {
     // hot module replacement is enabled in the development env
     webpackIsomorphicTools.refresh();
   }
+
+  // Needed for onTouchTap
+  // Can go away when react 1.0 release
+  // Check this repo:
+  // https://github.com/zilverline/react-tap-event-plugin
+  injectTapEventPlugin();
+
   const client = new ApiClient(req);
 
   const store = createStore(reduxReactRouter, getRoutes, createHistory, client);

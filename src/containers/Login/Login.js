@@ -3,6 +3,9 @@ import {connect} from 'react-redux';
 import Helmet from 'react-helmet';
 import * as authActions from 'redux/modules/auth';
 
+import { TextField, RaisedButton } from 'material-ui';
+
+
 @connect(
   state => ({user: state.auth.user}),
   authActions)
@@ -26,6 +29,7 @@ export default class Login extends Component {
     return (
       <div className={styles.loginPage + ' container'}>
         <Helmet title="Login"/>
+
         <h1>Login</h1>
         {!user &&
         <div>
@@ -47,7 +51,31 @@ export default class Login extends Component {
             <button className="btn btn-danger" onClick={logout}><i className="fa fa-sign-out"/>{' '}Log Out</button>
           </div>
         </div>
+
         }
+        <h1>Login Material</h1>
+          <div className="container">
+            <div className="row">
+              <TextField
+                  ref="userName"
+                  fullWidth
+                  hintText="User name"
+                  floatingLabelText="Login"/>
+            </div>
+            <div className="row">
+                <TextField
+                    ref="login"
+                    fullWidth
+                    hintText="Password"
+                    floatingLabelText="Password"/>
+            </div>
+            <RaisedButton label="Default" />
+
+            <RaisedButton label="Primary" primary={true} />
+
+            <RaisedButton label="Secondary" secondary={true} />
+
+        </div>
       </div>
     );
   }

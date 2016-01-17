@@ -11,6 +11,9 @@ import { pushState } from 'redux-router';
 import connectData from 'helpers/connectData';
 import config from '../../config';
 
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
+
 function fetchData(getState, dispatch) {
   const promises = [];
   if (!isInfoLoaded(getState())) {
@@ -37,6 +40,18 @@ export default class App extends Component {
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
+
+  // Needed for Material UI lib
+  static childContextTypes = {
+    muiTheme: React.PropTypes.object
+  };
+
+  // Needed for Material UI lib
+  getChildContext() {
+    return {
+      muiTheme: ThemeManager.getMuiTheme(LightRawTheme)
+    };
+  }
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
@@ -123,3 +138,10 @@ export default class App extends Component {
     );
   }
 }
+
+//
+// App.childContextTypes = {
+//   muiTheme: React.PropTypes.object
+// };
+
+// export default App;
