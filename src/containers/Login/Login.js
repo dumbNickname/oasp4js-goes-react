@@ -53,17 +53,17 @@ export default class Login extends Component {
         </div>
 
         }
-        <h1>Login Material</h1>
-          <div className="container">
+        <h1>Login Material zz</h1>
+          <form className="container" onSubmit={this.handleSubmit}>
             <div className="row">
               <TextField
-                  ref="userName"
-                  fullWidth
-                  hintText="User name"
-                  floatingLabelText="Login"/>
+                    ref="userName"
+                    fullWidth
+                    hintText="User name"
+                    floatingLabelText="Login"/>
             </div>
             <div className="row">
-                <TextField
+              <TextField
                     ref="login"
                     fullWidth
                     hintText="Password"
@@ -71,11 +71,10 @@ export default class Login extends Component {
             </div>
             <RaisedButton label="Default" />
 
-            <RaisedButton label="Primary" primary={true} />
+            <RaisedButton label="Primary" primary />
 
-            <RaisedButton label="Secondary" secondary={true} />
-
-        </div>
+            <RaisedButton label="Secondary" secondary />
+          </form>
       </div>
     );
   }
