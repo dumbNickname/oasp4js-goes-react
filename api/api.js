@@ -34,8 +34,6 @@ const apiProxy = httpProxy.createProxyServer({
 });
 
 function proxyOaspCalls(req, res){
-  //req.headers.connection = "keep-alive";
-
   console.log('Proxied request: "' + req.url + '"to OASP');
   console.log('Method: ' + JSON.stringify(req.method));
   console.log('Headers: ' + JSON.stringify(req.headers));
