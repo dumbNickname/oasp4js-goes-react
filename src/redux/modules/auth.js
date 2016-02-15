@@ -1,12 +1,12 @@
-const LOAD = 'redux-example/auth/LOAD';
-const LOAD_SUCCESS = 'redux-example/auth/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/auth/LOAD_FAIL';
-const LOGIN = 'redux-example/auth/LOGIN';
-const LOGIN_SUCCESS = 'redux-example/auth/LOGIN_SUCCESS';
-const LOGIN_FAIL = 'redux-example/auth/LOGIN_FAIL';
-const LOGOUT = 'redux-example/auth/LOGOUT';
-const LOGOUT_SUCCESS = 'redux-example/auth/LOGOUT_SUCCESS';
-const LOGOUT_FAIL = 'redux-example/auth/LOGOUT_FAIL';
+const LOAD_USER = 'redux-oasp/auth/LOAD_USER';
+const LOAD_USER_SUCCESS = 'redux-oasp/auth/LOAD_USER_SUCCESS';
+const LOAD_USER_FAIL = 'redux-oasp/auth/LOAD_USER_FAIL';
+const LOGIN = 'redux-oasp/auth/LOGIN';
+const LOGIN_SUCCESS = 'redux-oasp/auth/LOGIN_SUCCESS';
+const LOGIN_FAIL = 'redux-oasp/auth/LOGIN_FAIL';
+const LOGOUT = 'redux-oasp/auth/LOGOUT';
+const LOGOUT_SUCCESS = 'redux-oasp/auth/LOGOUT_SUCCESS';
+const LOGOUT_FAIL = 'redux-oasp/auth/LOGOUT_FAIL';
 
 const initialState = {
   loaded: false
@@ -14,19 +14,19 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case LOAD:
+    case LOAD_USER:
       return {
         ...state,
         loading: true
       };
-    case LOAD_SUCCESS:
+    case LOAD_USER_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
         user: action.result
       };
-    case LOAD_FAIL:
+    case LOAD_USER_FAIL:
       return {
         ...state,
         loading: false,
@@ -79,17 +79,18 @@ export function isLoaded(globalState) {
 
 export function load() {
   return {
-    types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/loadAuth')
+    types: [LOAD_USER, LOAD_USER_SUCCESS, LOAD_USER_FAIL],
+    promise: (client) => client.get('/currentuser')
   };
 }
 
-export function login(name) {
+export function login(name, password) {
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
-    promise: (client) => client.post('/login', {
+    promise: (client) => client.post('/oasp/login', {
       data: {
-        name: name
+        j_username: name,
+        j_password: password
       }
     })
   };

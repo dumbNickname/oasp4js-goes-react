@@ -6,6 +6,7 @@ import * as actions from './actions/index';
 import {mapUrl} from 'utils/url.js';
 import PrettyError from 'pretty-error';
 import http from 'http';
+import httpProxy from 'http-proxy';
 import SocketIo from 'socket.io';
 
 const pretty = new PrettyError();
@@ -22,11 +23,43 @@ app.use(session({
   saveUninitialized: false,
   cookie: { maxAge: 60000 }
 }));
-app.use(bodyParser.json());
 
+
+// -------- OASP proxy ------------
+
+const apiProxy = httpProxy.createProxyServer({
+  target: 'http://oasp-ci.cloudapp.net/oasp4j-sample/',
+  ws: true
+  //changeOrigin: true
+});
+
+function proxyOaspCalls(req, res){
+  //req.headers.connection = "keep-alive";
+
+  console.log('Proxied request: "' + req.url + '"to OASP');
+  console.log('Method: ' + JSON.stringify(req.method));
+  console.log('Headers: ' + JSON.stringify(req.headers));
+  console.log('Data: ' + JSON.stringify(req.body));
+
+  apiProxy.web(req, res, {
+    target: 'http://oasp-ci.cloudapp.net/oasp4j-sample/services/rest/',
+    //agent  : http.globalAgent
+    //buffer: httpProxy.buffer(req)
+  });
+
+}
+
+app.use("/oasp", proxyOaspCalls);
+
+// -------- END OASP proxy ------------
+
+// -------- NODE SERVER ACTION MAPPING --------
+
+app.use(bodyParser.json());
 
 app.use((req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
+  console.log('Map action, splittedUrlPath: ' + splittedUrlPath);
 
   const {action, params} = mapUrl(actions, splittedUrlPath);
 

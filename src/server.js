@@ -27,13 +27,12 @@ const app = new Express();
 const server = new http.Server(app);
 const proxy = httpProxy.createProxyServer({
   target: targetUrl,
-  ws: true
+  ws: true,
+  //changeOrigin: true
 });
 
 app.use(function(req, res, next) {
-    GLOBAL.navigator = {
-        userAgent: req.headers['user-agent']
-    }
+    res.locals.ua = req.get('User-Agent');
     next();
 });
 app.use(compression());
