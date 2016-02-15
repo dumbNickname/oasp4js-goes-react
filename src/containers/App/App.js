@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 // import { IndexLink } from 'react-router';
+import Nav from 'react-bootstrap/lib/Nav';
+import NavItem from 'react-bootstrap/lib/NavItem';
 import Helmet from 'react-helmet';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
@@ -11,7 +13,6 @@ import config from '../../config';
 import '../../theme/bootstrap.global.scss';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
-
 
 @connect(
   state => ({user: state.auth.user}),
@@ -60,6 +61,7 @@ export default class App extends Component {
     if (!isAuthLoaded(getState())) {
       promises.push(dispatch(loadAuth()));
     }
+
 
     return Promise.all(promises);
   }

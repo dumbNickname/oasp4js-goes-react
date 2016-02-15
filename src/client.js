@@ -10,11 +10,12 @@ import io from 'socket.io-client';
 import {Provider} from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import { ReduxAsyncConnect } from 'redux-async-connect';
+import useScroll from 'scroll-behavior/lib/useStandardScroll';
 
 import getRoutes from './routes';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
-
+const history = useScroll(() => browserHistory)();
 // Needed for onTouchTap
 // Can go away when react 1.0 release
 // Check this repo:
@@ -22,9 +23,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 const client = new ApiClient();
-
 const dest = document.getElementById('content');
-const store = createStore(getRoutes, browserHistory, client, window.__data);
+const store = createStore(history, client, window.__data);
 
 function initSocket() {
   const socket = io('', {path: '/ws'});
@@ -44,7 +44,7 @@ global.socket = initSocket();
 const component = (
   <Router render={(props) =>
         <ReduxAsyncConnect {...props} helpers={{client}} />
-      } history={browserHistory}>
+      } history={history}>
     {getRoutes(store)}
   </Router>
 );
