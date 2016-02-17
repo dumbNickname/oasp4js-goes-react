@@ -7,11 +7,22 @@ import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/module
 import { InfoBar } from 'components';
 import { routeActions } from 'react-router-redux';
 import config from '../../config';
+import { asyncConnect } from 'redux-async-connect';
 
-import '../../theme/bootstrap.global.scss';
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
+@asyncConnect([{
+  promise: ({store: {dispatch, getState}}) => {
+    const promises = [];
 
+    if (!isInfoLoaded(getState())) {
+      promises.push(dispatch(loadInfo()));
+    }
+    if (!isAuthLoaded(getState())) {
+      promises.push(dispatch(loadAuth()));
+    }
+
+    return Promise.all(promises);
+  }
+}])
 @connect(
   state => ({user: state.auth.user}),
   {logout, pushState: routeActions.push})
@@ -49,20 +60,6 @@ export default class App extends Component {
     }
   }
 
-  static reduxAsyncConnect(params, store) {
-    const {dispatch, getState} = store;
-    const promises = [];
-
-    if (!isInfoLoaded(getState())) {
-      promises.push(dispatch(loadInfo()));
-    }
-    if (!isAuthLoaded(getState())) {
-      promises.push(dispatch(loadAuth()));
-    }
-
-
-    return Promise.all(promises);
-  }
 
   handleLogout = (event) => {
     event.preventDefault();
