@@ -59,7 +59,7 @@ export default class Login extends Component {
         </div>
 
         }
-        <h1>Login Material zz</h1>
+        <h1>Login Material</h1>
           <form className="container" onSubmit={this.handleSubmit}>
             <div className="row">
               <TextField

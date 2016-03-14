@@ -15,6 +15,7 @@ import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import getRoutes from './routes';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
+
 const history = useScroll(() => browserHistory)();
 // Needed for onTouchTap
 // Can go away when react 1.0 release

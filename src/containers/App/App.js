@@ -9,6 +9,10 @@ import { routeActions } from 'react-router-redux';
 import config from '../../config';
 import { asyncConnect } from 'redux-async-connect';
 
+import '../../theme/bootstrap.global.scss';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
+
 @asyncConnect([{
   promise: ({store: {dispatch, getState}}) => {
     const promises = [];

@@ -21,6 +21,7 @@ import getRoutes from './routes';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 
+
 const targetUrl = 'http://' + config.apiHost + ':' + config.apiPort;
 const pretty = new PrettyError();
 const app = new Express();
@@ -30,6 +31,14 @@ const proxy = httpProxy.createProxyServer({
   ws: true,
   //changeOrigin: true
 });
+
+// Needed for onTouchTap
+// Can go away when react 1.0 release
+// Check this repo:
+// https://github.com/zilverline/react-tap-event-plugin
+injectTapEventPlugin();
+
+
 
 app.use(function(req, res, next) {
     res.locals.ua = req.get('User-Agent');
@@ -67,18 +76,13 @@ proxy.on('error', (error, req, res) => {
   res.end(JSON.stringify(json));
 });
 
+
 app.use((req, res) => {
   if (__DEVELOPMENT__) {
     // Do not cache webpack stats: the script file would change since
     // hot module replacement is enabled in the development env
     webpackIsomorphicTools.refresh();
   }
-
-  // Needed for onTouchTap
-  // Can go away when react 1.0 release
-  // Check this repo:
-  // https://github.com/zilverline/react-tap-event-plugin
-  injectTapEventPlugin();
 
   const client = new ApiClient(req);
   const history = createHistory(req.originalUrl);
