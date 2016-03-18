@@ -1,15 +1,18 @@
 const LOAD_USER = 'redux-oasp/auth/LOAD_USER';
 const LOAD_USER_SUCCESS = 'redux-oasp/auth/LOAD_USER_SUCCESS';
 const LOAD_USER_FAIL = 'redux-oasp/auth/LOAD_USER_FAIL';
+
 const LOGIN = 'redux-oasp/auth/LOGIN';
 const LOGIN_SUCCESS = 'redux-oasp/auth/LOGIN_SUCCESS';
 const LOGIN_FAIL = 'redux-oasp/auth/LOGIN_FAIL';
+
 const LOGOUT = 'redux-oasp/auth/LOGOUT';
 const LOGOUT_SUCCESS = 'redux-oasp/auth/LOGOUT_SUCCESS';
 const LOGOUT_FAIL = 'redux-oasp/auth/LOGOUT_FAIL';
 
 const initialState = {
-  loaded: false
+  loaded: false,
+  user: null
 };
 
 export default function reducer(state = initialState, action = {}) {

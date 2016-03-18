@@ -13,6 +13,7 @@ import PrettyError from 'pretty-error';
 import http from 'http';
 
 import { match } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-async-connect';
 import createHistory from 'react-router/lib/createMemoryHistory';
 import {Provider} from 'react-redux';
@@ -88,6 +89,7 @@ app.use((req, res) => {
   const history = createHistory(req.originalUrl);
 
   const store = createStore(history, client);
+  const syncedHistory = syncHistoryWithStore(history, store);
 
   function hydrateOnClient() {
     res.send('<!doctype html>\n' +
@@ -99,7 +101,7 @@ app.use((req, res) => {
     return;
   }
 
-  match({ history, routes: getRoutes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+  match({ history: syncedHistory, routes: getRoutes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
     if (redirectLocation) {
       res.redirect(redirectLocation.pathname + redirectLocation.search);
     } else if (error) {
