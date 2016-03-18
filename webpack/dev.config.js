@@ -4,6 +4,7 @@ require('babel-polyfill');
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
 var assetsPath = path.resolve(__dirname, '../static/dist');
 var host = (process.env.HOST || 'localhost');
 var port = (+process.env.PORT + 1) || 3001;
@@ -83,10 +84,10 @@ module.exports = {
       { test: /\.json$/, loader: 'json-loader' },
 
       { test: /\.css$/,  loader: "style-loader!css-loader" },
-      { test: /\.less$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap' },
+      { test: /\.less$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!postcss!less?outputStyle=expanded&sourceMap' },
 
-      { test: /\.scss$/, exclude: /\.global\.scss$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap' },
-      { test: /\.global\.scss$/, loader: 'style!css?importLoaders=2&sourceMap&localIdentName=[local]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap' },
+      { test: /\.scss$/, exclude: /\.global\.scss$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!postcss!sass?outputStyle=expanded&sourceMap' },
+      { test: /\.global\.scss$/, loader: 'style!css?importLoaders=2&sourceMap&localIdentName=[local]!postcss!sass?outputStyle=expanded&sourceMap' },
 
       { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
       { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
@@ -96,6 +97,9 @@ module.exports = {
       { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=image/svg+xml" },
       { test: webpackIsomorphicToolsPlugin.regular_expression('images'), loader: 'url-loader?limit=10240' }
     ]
+  },
+  postcss: function() {
+    return [autoprefixer({ browsers: ['last 2 versions'] })];
   },
   progress: true,
   resolve: {
