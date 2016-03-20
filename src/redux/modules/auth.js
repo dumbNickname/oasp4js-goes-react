@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 const LOAD_USER = 'redux-oasp/auth/LOAD_USER';
 const LOAD_USER_SUCCESS = 'redux-oasp/auth/LOAD_USER_SUCCESS';
 const LOAD_USER_FAIL = 'redux-oasp/auth/LOAD_USER_FAIL';
@@ -5,6 +7,7 @@ const LOAD_USER_FAIL = 'redux-oasp/auth/LOAD_USER_FAIL';
 const LOGIN = 'redux-oasp/auth/LOGIN';
 const LOGIN_SUCCESS = 'redux-oasp/auth/LOGIN_SUCCESS';
 const LOGIN_FAIL = 'redux-oasp/auth/LOGIN_FAIL';
+const REQUIRE_LOGIN = 'redux-oasp/auth/REQUIRE_LOGIN';
 
 const LOGOUT = 'redux-oasp/auth/LOGOUT';
 const LOGOUT_SUCCESS = 'redux-oasp/auth/LOGOUT_SUCCESS';
@@ -76,6 +79,7 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
+
 export function isLoaded(globalState) {
   return globalState.auth && globalState.auth.loaded;
 }
@@ -96,6 +100,14 @@ export function login(name, password) {
         j_password: password
       }
     })
+  };
+}
+
+export function redirectToLogin(dispatch) {
+  dispatch(push('/login'));
+
+  return {
+    type: REQUIRE_LOGIN
   };
 }
 

@@ -1,7 +1,9 @@
+import { redirectToLogin } from '../modules/auth';
+
 export default function clientMiddleware(client) {
   return ({dispatch, getState}) => {
     return next => action => {
-      if (typeof action === 'function') {
+      if (typeof action === 'function') { // support thunk functions
         return action(dispatch, getState);
       }
 
@@ -16,7 +18,13 @@ export default function clientMiddleware(client) {
       const actionPromise = promise(client);
       actionPromise.then(
         (result) => next({...rest, result, type: SUCCESS}),
-        (error) => next({...rest, error, type: FAILURE})
+        (error) => {
+          if (error.response && error.response.status === 401 && window.location.pathname !== '/login') {
+            next(redirectToLogin(dispatch));
+          } else {
+            next({...rest, error, type: FAILURE});
+          }
+        }
       ).catch((error)=> {
         console.error('MIDDLEWARE ERROR:', error);
         next({...rest, error, type: FAILURE});
