@@ -7,7 +7,6 @@ const LOAD_USER_FAIL = 'redux-oasp/auth/LOAD_USER_FAIL';
 const LOGIN = 'redux-oasp/auth/LOGIN';
 const LOGIN_SUCCESS = 'redux-oasp/auth/LOGIN_SUCCESS';
 const LOGIN_FAIL = 'redux-oasp/auth/LOGIN_FAIL';
-const REQUIRE_LOGIN = 'redux-oasp/auth/REQUIRE_LOGIN';
 
 const LOGOUT = 'redux-oasp/auth/LOGOUT';
 const LOGOUT_SUCCESS = 'redux-oasp/auth/LOGOUT_SUCCESS';
@@ -103,11 +102,15 @@ export function login(name, password) {
   };
 }
 
-export function redirectToLogin(dispatch) {
-  dispatch(push('/login'));
 
-  return {
-    type: REQUIRE_LOGIN
+export function redirectWhenNotOnLogin() {
+  return (dispatch, getState) => {
+    const locationPath = getState().routing.locationBeforeTransitions.pathname;
+
+    if (locationPath === '/login') {
+      return;
+    }
+    dispatch(push('/login'));
   };
 }
 

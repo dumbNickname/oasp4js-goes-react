@@ -1,4 +1,4 @@
-import { redirectToLogin } from '../modules/auth';
+import { redirectWhenNotOnLogin } from '../modules/auth';
 
 export default function clientMiddleware(client) {
   return ({dispatch, getState}) => {
@@ -19,8 +19,8 @@ export default function clientMiddleware(client) {
       actionPromise.then(
         (result) => next({...rest, result, type: SUCCESS}),
         (error) => {
-          if (error.response && error.response.status === 401 && window.location.pathname !== '/login') {
-            next(redirectToLogin(dispatch));
+          if (error.response && error.response.status === 401) {
+            dispatch(redirectWhenNotOnLogin());
           } else {
             next({...rest, error, type: FAILURE});
           }
